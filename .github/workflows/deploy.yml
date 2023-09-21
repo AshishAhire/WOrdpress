@@ -1,0 +1,43 @@
+name: Deploy WordPress
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known-hosts: ${{ secrets.KNOWN_HOSTS }}
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y nginx mysql-client php-fpm php-mysql
+        # Add any other necessary packages here
+
+    - name: Deploy to VPS
+      run: |
+        # Add commands to deploy your WordPress site here
+        # For example, you might SCP or rsync your WordPress files to your VPS
+        # You might also import your database using the 'mysql' command
+
+    - name: Restart Nginx
+      run: |
+        sudo systemctl restart nginx
+
+    - name: Cleanup
+      run: |
+        # Add cleanup commands if needed
+
+    # Add any additional steps as necessary.
+
